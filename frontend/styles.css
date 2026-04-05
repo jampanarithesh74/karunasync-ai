@@ -98,7 +98,7 @@ body {
 }
 
 .role-card.ngo:hover {
-    transform: translateY(-8px);
+    transform: scale(1.05);
     box-shadow: 0 16px 48px rgba(255, 107, 53, 0.25);
 }
 
@@ -108,7 +108,7 @@ body {
 }
 
 .role-card.volunteer:hover {
-    transform: translateY(-8px);
+    transform: scale(1.05);
     box-shadow: 0 16px 48px rgba(155, 89, 182, 0.25);
 }
 
@@ -665,7 +665,9 @@ body {
 }
 
 .footer {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
     color: var(--gray-500);
     font-size: 14px;
@@ -781,6 +783,13 @@ body {
     height: 22px;
     background: linear-gradient(180deg, var(--purple-primary), var(--orange-primary));
     border-radius: 2px;
+}
+
+.needs-section,
+.volunteer-inputs-section,
+.matched-section,
+.assigned-section {
+    margin-bottom: 24px;
 }
 
 .needs-grid {
@@ -943,15 +952,265 @@ body {
     margin-top: 4px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.all-done-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    border-radius: 16px;
+    border: 2px solid #10B981;
+    text-align: center;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.all-done-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    animation: bounce 0.6s ease-out;
+}
+
+@keyframes bounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.all-done-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 8px;
+}
+
+.all-done-hint {
+    font-size: 14px;
+    color: #6EE7B7;
+    font-weight: 500;
+}
+
+/* Section Subtitle */
+.section-subtitle {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+    margin-top: -8px;
+}
+
+/* Clickable Cards */
+.need-card.clickable {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.need-card.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Success Message */
+.success-message {
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #D1FAE5, #ECFDF5);
+    border: 2px solid #10B981;
+    border-radius: 12px;
+    color: #059669;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 24px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Role Switch Button */
+.role-switch-btn {
+    padding: 10px 20px;
+    background: var(--white);
+    border: 2px solid var(--purple-primary);
+    border-radius: 10px;
+    color: var(--purple-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 16px;
+}
+
+.role-switch-btn:hover {
+    background: var(--purple-primary);
+    color: var(--white);
+}
+
+/* Assigned Section */
+.assigned-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+    margin-bottom: 24px;
+}
+
+.assigned-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.assigned-section h2::before {
+    content: '';
+    width: 4px;
+    height: 22px;
+    background: linear-gradient(180deg, #3B82F6, #2563EB);
+    border-radius: 2px;
+}
+
+.assigned-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.assigned-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    animation: fadeIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+.assigned-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.assigned-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.assigned-card-info {
+    flex: 1;
+}
+
+.assigned-card-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.assigned-card-date {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+
+/* In Progress Section */
+.in-progress-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.1);
+    margin-bottom: 24px;
+}
+
+.in-progress-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.in-progress-section h2::before {
+    content: '';
+    width: 4px;
+    height: 22px;
+    background: linear-gradient(180deg, #F59E0B, #D97706);
+    border-radius: 2px;
+}
+
+.in-progress-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.in-progress-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    animation: fadeIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+.in-progress-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.in-progress-card-info {
+    flex: 1;
+}
+
+.in-progress-card-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.in-progress-card-date {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+}
+
+.contribution-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
@@ -963,21 +1222,24 @@ body {
     gap: 12px;
 }
 
-.accept-btn {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #10B981, #059669);
+/* Unified Button Styles */
+.accept-btn,
+.action-btn {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
     border: none;
-    border-radius: 10px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
     font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.accept-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+.accept-btn:hover,
+.action-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
 }
 
 /* Contributions Section */
@@ -987,6 +1249,7 @@ body {
     padding: 24px;
     box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
     margin-top: 24px;
+    margin-bottom: 24px;
 }
 
 .contributions-section h2 {
@@ -1018,21 +1281,27 @@ body {
     align-items: center;
     gap: 16px;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    background: var(--white);
     border-radius: 14px;
-    border: 2px solid #10B981;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     animation: fadeIn 0.3s ease-out forwards;
     opacity: 0;
 }
 
+.contribution-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 .contribution-card-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .contribution-card-info {
@@ -1040,7 +1309,7 @@ body {
 }
 
 .contribution-card-name {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--gray-900);
 }
@@ -1048,7 +1317,41 @@ body {
 .contribution-card-meta {
     font-size: 13px;
     color: var(--gray-500);
-    margin-top: 2px;
+    margin-top: 4px;
+}
+
+/* Filter Buttons */
+.status-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background: var(--white);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-400);
+}
+
+.filter-btn.active {
+    background: #6a11cb;
+    color: white;
+    border-color: #6a11cb;
+}
+
+.filter-btn.active:hover {
+    background: #5a0eb8;
 }
 
 .contribution-card-status {
