@@ -955,6 +955,112 @@ body {
 }
 
 @media (max-width: 768px) {
+
+/* Accept Button */
+.matched-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.accept-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.accept-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Contributions Section */
+.contributions-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+    margin-top: 24px;
+}
+
+.contributions-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contributions-section h2::before {
+    content: '';
+    width: 4px;
+    height: 22px;
+    background: linear-gradient(180deg, #10B981, #059669);
+    border-radius: 2px;
+}
+
+.contributions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.contribution-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    border-radius: 14px;
+    border: 2px solid #10B981;
+    animation: fadeIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+.contribution-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.contribution-card-info {
+    flex: 1;
+}
+
+.contribution-card-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.contribution-card-meta {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 2px;
+}
+
+.contribution-card-status {
+    padding: 8px 16px;
+    background: #10B981;
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
     .dashboard {
         padding: 20px 16px;
         gap: 24px;

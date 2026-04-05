@@ -1,5 +1,6 @@
 let currentRole = null;
 let detectedNeeds = [];
+let acceptedTasks = [];
 
 // Global functions for inline onclick handlers
 function selectRole(role) {
@@ -150,6 +151,11 @@ Example: Our community needs clean water. The local clinic lacks medical supplie
             <section id="matchedSection" class="matched-section hidden">
                 <h2>Your Assigned Tasks</h2>
                 <div id="matchedContainer" class="matched-grid"></div>
+            </section>
+
+            <section id="contributionsSection" class="contributions-section hidden">
+                <h2>Your Contributions</h2>
+                <div id="contributionsContainer" class="contributions-grid"></div>
             </section>
         </main>
 
@@ -471,7 +477,7 @@ function matchVolunteerTasks() {
             matchedContainer.innerHTML = `
                 <div class="no-match-card">
                     <div class="no-match-icon">⚠️</div>
-                    <div class="no-match-text">No matching tasks found</div>
+                    <div class="no-match-text">No matching tasks found based on your skills</div>
                     <div class="no-match-hint">Try skills that match: ${detectedNeeds.map(n => n.category).join(', ')}</div>
                 </div>
             `;
@@ -492,14 +498,69 @@ function matchVolunteerTasks() {
                         <div class="matched-card-skill">Your skill: ${task.matchedSkill}</div>
                         ${location ? `<div class="matched-card-location">📍 ${location}</div>` : ''}
                     </div>
-                    <div class="matched-card-priority" style="background: ${colors[task.category]};">${task.priority}</div>
+                    <div class="matched-card-actions">
+                        <span class="matched-card-priority" style="background: ${colors[task.category]};">${task.priority}</span>
+                        <button class="accept-btn" onclick="acceptTask(${index})">Accept Task</button>
+                    </div>
                 `;
                 matchedContainer.appendChild(card);
             });
+            
+            window.currentMatchedTasks = matchedTasks;
+            window.currentLocation = location;
         }
 
         matchedSection.classList.remove('hidden');
         matchBtn.disabled = false;
         matchBtn.textContent = 'Match Tasks';
     }, 800);
+}
+
+function acceptTask(index) {
+    const task = window.currentMatchedTasks[index];
+    const location = window.currentLocation;
+    
+    const acceptedTask = {
+        ...task,
+        acceptedAt: new Date().toLocaleDateString()
+    };
+    
+    acceptedTasks.push(acceptedTask);
+    
+    alert('Task Accepted Successfully!');
+    
+    displayContributions();
+}
+
+function displayContributions() {
+    const contributionsSection = document.getElementById('contributionsSection');
+    const contributionsContainer = document.getElementById('contributionsContainer');
+    
+    if (acceptedTasks.length === 0) {
+        contributionsSection.classList.add('hidden');
+        return;
+    }
+    
+    contributionsContainer.innerHTML = '';
+    const icons = { 'Water': '💧', 'Medical': '🏥', 'Food': '🍞' };
+    const colors = { 'Water': '#3B82F6', 'Medical': '#8B5CF6', 'Food': '#F59E0B' };
+    
+    acceptedTasks.forEach((task, index) => {
+        const card = document.createElement('div');
+        card.className = 'contribution-card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.innerHTML = `
+            <div class="contribution-card-icon" style="background: ${colors[task.category]}20; color: ${colors[task.category]};">
+                ${icons[task.category]}
+            </div>
+            <div class="contribution-card-info">
+                <div class="contribution-card-name">${task.category} Support</div>
+                <div class="contribution-card-meta">Accepted: ${task.acceptedAt}</div>
+            </div>
+            <div class="contribution-card-status">✓ Active</div>
+        `;
+        contributionsContainer.appendChild(card);
+    });
+    
+    contributionsSection.classList.remove('hidden');
 }
