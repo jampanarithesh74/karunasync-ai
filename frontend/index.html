@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="#FF6B35" stroke-width="3"/>
+                    <path d="M16 8v16M8 16h16" stroke="#9B59B6" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1>NGO Report Analyzer</h1>
+        </header>
+
+        <main class="main-content">
+            <section class="input-section">
+                <label for="report">Input NGO Report</label>
+                <textarea id="report" placeholder="Paste your NGO report here...
+
+Example: Our community in rural Kenya faces severe water shortage. The nearest borehole is 5km away. Children walk for hours to fetch water, missing school. We need at least 3 water tanks and a solar pump system. Also, the local clinic lacks basic medicines and medical supplies."></textarea>
+                <button id="analyzeBtn" class="analyze-btn">
+                    <span>Analyze Report</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </section>
+
+            <section id="resultsSection" class="results-section hidden">
+                <h2>Detected Needs</h2>
+                <div id="needsContainer" class="needs-container"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>NGO Dashboard &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
