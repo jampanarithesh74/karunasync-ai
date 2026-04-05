@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO Dashboard</title>
+    <title>KarunaSync AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="dashboard">
-        <header class="header">
-            <div class="logo">
-                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+    <div id="roleScreen" class="role-screen">
+        <div class="role-content">
+            <div class="role-logo">
+                <svg width="48" height="48" viewBox="0 0 32 32" fill="none">
                     <circle cx="16" cy="16" r="12" stroke="white" stroke-width="2.5"/>
                     <path d="M16 10v12M10 16h12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
             </div>
-            <h1>NGO Report Analyzer</h1>
-        </header>
-
-        <main class="main-content">
-            <section class="input-section">
-                <label for="report">Input NGO Report</label>
-                <textarea id="report" placeholder="Paste your NGO report here...
-
-Example: Our community in rural Kenya faces severe water shortage. The nearest borehole is 5km away. Children walk for hours to fetch water, missing school. We need at least 3 water tanks and a solar pump system. Also, the local clinic lacks basic medicines and medical supplies."></textarea>
-                <button id="analyzeBtn" class="analyze-btn">
-                    <span>Analyze Report</span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+            <h1 class="role-title">KarunaSync AI</h1>
+            <p class="role-subtitle">Synchronizing compassion with action</p>
+            
+            <div class="role-cards">
+                <button class="role-card ngo" onclick="selectRole('ngo')">
+                    <div class="role-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <span class="role-name">NGO</span>
+                    <span class="role-desc">Submit reports & analyze needs</span>
                 </button>
-            </section>
+                
+                <button class="role-card volunteer" onclick="selectRole('volunteer')">
+                    <div class="role-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <span class="role-name">Volunteer</span>
+                    <span class="role-desc">Match skills & help communities</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-            <section id="resultsSection" class="results-section hidden">
-                <h2>Detected Needs</h2>
-                <div id="needsContainer" class="needs-container"></div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <p>NGO Dashboard &copy; 2026</p>
-        </footer>
+    <div id="dashboard" class="dashboard hidden">
     </div>
 
     <script src="script.js"></script>
