@@ -1,7 +1,7 @@
 document.getElementById('analyzeBtn').addEventListener('click', analyzeReport);
 
-async function analyzeReport() {
-    const report = document.getElementById('report').value.trim();
+function analyzeReport() {
+    const report = document.getElementById('report').value.trim().toLowerCase();
     const resultsSection = document.getElementById('resultsSection');
     const needsContainer = document.getElementById('needsContainer');
     const analyzeBtn = document.getElementById('analyzeBtn');
@@ -12,52 +12,75 @@ async function analyzeReport() {
     }
 
     analyzeBtn.disabled = true;
-    analyzeBtn.textContent = 'Analyzing...';
+    analyzeBtn.innerHTML = `
+        <span>Analyzing</span>
+        <span class="loading-dots">
+            <span>.</span><span>.</span><span>.</span>
+        </span>
+    `;
 
-    try {
-        const response = await fetch('http://localhost:3000/analyze', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: report })
-        });
+    needsContainer.innerHTML = `
+        <div class="loading-card">
+            <div class="spinner"></div>
+            <span>Analyzing your report...</span>
+        </div>
+    `;
+    resultsSection.classList.remove('hidden');
 
-        const data = await response.json();
-        const needs = data.needs || [];
-        
+    setTimeout(() => {
+        const needs = [];
+
+        if (report.includes('water')) {
+            needs.push({ category: 'Water', priority: 'High' });
+        }
+        if (report.includes('medical')) {
+            needs.push({ category: 'Medical', priority: 'Medium' });
+        }
+        if (report.includes('food')) {
+            needs.push({ category: 'Food', priority: 'Low' });
+        }
+
         needsContainer.innerHTML = '';
 
         if (needs.length === 0) {
             needsContainer.innerHTML = `
-                <div class="need-card low">
-                    <span class="priority-badge low">Low</span>
+                <div class="need-card low" style="border-left: 5px solid var(--gray-300);">
                     <div class="need-content">
-                        <div class="need-title">No specific needs detected</div>
-                        <div class="need-description">Try adding more details about specific requirements or challenges.</div>
+                        <div class="need-icon" style="background: var(--gray-100);">🔍</div>
+                        <div class="need-title" style="color: var(--gray-500);">No specific needs detected</div>
                     </div>
                 </div>
             `;
         } else {
+            const icons = {
+                'Water': '💧',
+                'Medical': '🏥',
+                'Food': '🍞'
+            };
+
             needs.forEach((need, index) => {
                 const card = document.createElement('div');
                 card.className = `need-card ${need.priority.toLowerCase()}`;
                 card.style.animationDelay = `${index * 0.1}s`;
 
                 card.innerHTML = `
-                    <span class="priority-badge ${need.priority.toLowerCase()}">${need.priority}</span>
                     <div class="need-content">
+                        <div class="need-icon">${icons[need.category] || '📌'}</div>
                         <div class="need-title">${need.category}</div>
                     </div>
+                    <span class="priority-badge ${need.priority.toLowerCase()}">${need.priority}</span>
                 `;
 
                 needsContainer.appendChild(card);
             });
         }
 
-        resultsSection.classList.remove('hidden');
-    } catch (error) {
-        alert('Failed to analyze report. Make sure the server is running.');
-    } finally {
         analyzeBtn.disabled = false;
-        analyzeBtn.innerHTML = '<span>Analyze Report</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    }
+        analyzeBtn.innerHTML = `
+            <span>Analyze Report</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
+    }, 1500);
 }
