@@ -132,6 +132,10 @@ function renderVolunteerDashboard(useSharedNeeds) {
     useSharedNeeds = useSharedNeeds || false;
     const dashboard = document.getElementById('dashboard');
     
+    const totalTasks = allTasks.length;
+    const activeTasks = allTasks.filter(function(t) { return t.status === 'accepted' || t.status === 'in-progress'; }).length;
+    const completedTasks = allTasks.filter(function(t) { return t.status === 'completed'; }).length;
+    
     dashboard.innerHTML = `
         <header class="header">
             <button class="back-btn" onclick="showRoleScreen()">
@@ -148,11 +152,35 @@ function renderVolunteerDashboard(useSharedNeeds) {
         </header>
 
         <main class="main-content">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon total">📋</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Tasks</span>
+                        <span class="stat-value">${totalTasks}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon active">⚡</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Active Tasks</span>
+                        <span class="stat-value">${activeTasks}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">✓</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Completed</span>
+                        <span class="stat-value">${completedTasks}</span>
+                    </div>
+                </div>
+            </div>
+
             ${useSharedNeeds && detectedNeeds.length > 0 ? '<section class="shared-needs-banner"><div class="banner-icon">📋</div><div class="banner-text"><strong>Needs from NGO Report</strong><span>' + detectedNeeds.length + ' needs detected</span></div></section>' : ''}
 
             ${(!useSharedNeeds || detectedNeeds.length === 0) ? '<section class="input-section purple-accent"><label for="report">NGO Report (Optional)</label><textarea id="report" placeholder="Paste an NGO report here to see detected needs..."></textarea></section>' : ''}
 
-            ${detectedNeeds.length > 0 ? '<section id="detectedNeedsSection" class="needs-section"><h2>Detected Needs</h2><p class="section-subtitle">AI-detected needs from NGO report</p><div id="needsContainer" class="needs-grid"></div></section>' : '<section id="detectedNeedsSection" class="needs-section hidden"><h2>Detected Needs</h2><p class="section-subtitle">AI-detected needs from NGO report</p><div id="needsContainer" class="needs-grid"></div></section>'}
+            ${detectedNeeds.length > 0 ? '<section id="detectedNeedsSection" class="needs-section"><h2>Detected Needs</h2><p class="section-subtitle">AI-detected needs from NGO report</p><p class="ai-explanation">AI analyzed the report and identified priority needs</p><div id="needsContainer" class="needs-grid"></div></section>' : '<section id="detectedNeedsSection" class="needs-section hidden"><h2>Detected Needs</h2><p class="section-subtitle">AI-detected needs from NGO report</p><p class="ai-explanation">AI analyzed the report and identified priority needs</p><div id="needsContainer" class="needs-grid"></div></section>'}
 
             <section class="volunteer-inputs-section">
                 <h2>Volunteer Input</h2>
@@ -170,22 +198,23 @@ function renderVolunteerDashboard(useSharedNeeds) {
             </div>
 
             <section id="matchedSection" class="matched-section hidden">
-                <h2>Matched Tasks</h2>
+                <h2>Matched Tasks <span id="matchedCount" class="section-count">(0)</span></h2>
+                <p class="ai-explanation">Tasks matched based on your skills using AI logic</p>
                 <div id="matchedContainer" class="matched-grid"></div>
             </section>
 
             <section id="assignedSection" class="assigned-section hidden">
-                <h2>Your Assigned Tasks</h2>
+                <h2>Your Assigned Tasks <span id="assignedCount" class="section-count">(0)</span></h2>
                 <div id="assignedContainer" class="assigned-grid"></div>
             </section>
 
             <section id="inProgressSection" class="in-progress-section hidden">
-                <h2>In Progress Tasks</h2>
+                <h2>In Progress Tasks <span id="inProgressCount" class="section-count">(0)</span></h2>
                 <div id="inProgressContainer" class="in-progress-grid"></div>
             </section>
 
             <section id="contributionsSection" class="contributions-section hidden">
-                <h2>Completed Tasks</h2>
+                <h2>Completed Tasks <span id="contributionsCount" class="section-count">(0)</span></h2>
                 <div class="status-filters">
                     <button class="filter-btn active" data-filter="all" onclick="filterContributions('all')">All</button>
                     <button class="filter-btn" data-filter="active" onclick="filterContributions('active')">Active</button>
@@ -302,6 +331,7 @@ function matchTasks() {
         renderAssignedTasks();
         renderInProgressTasks();
         renderContributions();
+        renderStats();
         
         matchBtn.disabled = false;
         matchBtn.textContent = 'Match Tasks';
@@ -314,8 +344,8 @@ function renderMatchedTasks() {
     const matchedTasks = allTasks.filter(function(t) { return t.status === 'matched'; });
 
     if (matchedTasks.length === 0) {
-        matchedContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-text">Great job! You\'ve accepted all matching tasks</div></div>';
         matchedSection.classList.remove('hidden');
+        matchedContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-text">Great job! You\'ve accepted all matching tasks</div></div>';
         return;
     }
 
@@ -335,6 +365,35 @@ function renderMatchedTasks() {
     matchedSection.classList.remove('hidden');
 }
 
+function renderStats() {
+    const totalTasks = allTasks.length;
+    const activeTasks = allTasks.filter(function(t) { return t.status === 'accepted' || t.status === 'in-progress'; }).length;
+    const completedTasks = allTasks.filter(function(t) { return t.status === 'completed'; }).length;
+    
+    document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalTasks;
+    document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = activeTasks;
+    document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = completedTasks;
+    
+    updateSectionCounts();
+}
+
+function updateSectionCounts() {
+    const matchedCount = allTasks.filter(function(t) { return t.status === 'matched'; }).length;
+    const assignedCount = allTasks.filter(function(t) { return t.status === 'accepted'; }).length;
+    const inProgressCount = allTasks.filter(function(t) { return t.status === 'in-progress'; }).length;
+    const contributionsCount = allTasks.filter(function(t) { return t.status === 'accepted' || t.status === 'in-progress' || t.status === 'completed'; }).length;
+    
+    var matchedEl = document.getElementById('matchedCount');
+    var assignedEl = document.getElementById('assignedCount');
+    var inProgressEl = document.getElementById('inProgressCount');
+    var contributionsEl = document.getElementById('contributionsCount');
+    
+    if (matchedEl) matchedEl.textContent = '(' + matchedCount + ')';
+    if (assignedEl) assignedEl.textContent = '(' + assignedCount + ')';
+    if (inProgressEl) inProgressEl.textContent = '(' + inProgressCount + ')';
+    if (contributionsEl) contributionsEl.textContent = '(' + contributionsCount + ')';
+}
+
 function acceptTask(index) {
     allTasks[index].status = 'accepted';
     allTasks[index].acceptedAt = new Date().toLocaleDateString();
@@ -343,6 +402,7 @@ function acceptTask(index) {
     renderMatchedTasks();
     renderAssignedTasks();
     renderContributions();
+    renderStats();
 }
 
 function showSuccessMessage() {
@@ -359,7 +419,8 @@ function renderAssignedTasks() {
     const acceptedTasks = allTasks.filter(function(t) { return t.status === 'accepted'; });
 
     if (acceptedTasks.length === 0) {
-        assignedSection.classList.add('hidden');
+        assignedSection.classList.remove('hidden');
+        assignedContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No assigned tasks yet</div></div>';
         return;
     }
 
@@ -384,7 +445,8 @@ function renderInProgressTasks() {
     const inProgressTasks = allTasks.filter(function(t) { return t.status === 'in-progress'; });
 
     if (inProgressTasks.length === 0) {
-        inProgressSection.classList.add('hidden');
+        inProgressSection.classList.remove('hidden');
+        inProgressContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">No tasks in progress</div></div>';
         return;
     }
 
@@ -408,6 +470,7 @@ function startTask(index) {
     allTasks[index].startedAt = new Date().toLocaleDateString();
     renderAssignedTasks();
     renderInProgressTasks();
+    renderStats();
 }
 
 function completeTask(index) {
@@ -415,6 +478,7 @@ function completeTask(index) {
     allTasks[index].completedAt = new Date().toLocaleDateString();
     renderInProgressTasks();
     renderContributions();
+    renderStats();
 }
 
 function filterContributions(filter) {
@@ -434,8 +498,14 @@ function renderContributions(filter) {
     if (filter === 'completed') filteredTasks = allTasks.filter(function(t) { return t.status === 'completed'; });
 
     if (filteredTasks.length === 0) {
-        contributionsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-text">All tasks completed!</div></div>';
         contributionsSection.classList.remove('hidden');
+        if (filter === 'completed') {
+            contributionsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-text">Great job! All tasks completed</div></div>';
+        } else if (filter === 'active') {
+            contributionsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No active tasks</div></div>';
+        } else {
+            contributionsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🤝</div><div class="empty-text">No contributions yet. Start helping communities!</div></div>';
+        }
         return;
     }
 
